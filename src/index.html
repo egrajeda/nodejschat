@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+    $(document).ready(function() {
+        var socket = io.connect('http://localhost');
+        socket.on('message', function(data) {
+            $(document.createElement("div")).text(data.message).appendTo($("#chat"));
+        });
+
+        $("#input").keypress(function(e) {
+            if (e.which != 13) {
+                return true;
+            }
+            socket.emit('message', { message: $(this).val() });
+            $(this).val("");
+        });
+    });
+
+    </script>
+    <style>
+
+    html {
+        font-family: sans;
+    }
+
+    input {
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
+        right: 15px;
+        border: 1px solid #aaa;
+        padding: 5px;
+    }
+
+    </style>
+  </head>
+  <body>
+
+    <div id="chat"></div>
+
+    <input id="input" type="text" placeholder="Escribí algo para saludar a la audiencia" />
+
+  </body>
+</html>
