@@ -5,9 +5,20 @@
     <script>
 
     $(document).ready(function() {
+        var sounds = {
+            connection: new Audio('sounds/connection.wav'),
+            message: new Audio('sounds/message.wav')
+        };
         var socket = io.connect('http://localhost');
+
+        socket.on('connection', function() {
+            sounds.connection.play();
+        });
+
         socket.on('message', function(data) {
             $(document.createElement("div")).text(data.message).appendTo($("#chat"));
+            $('#chat').animate({ scrollTop: $('#chat')[0].scrollHeight });
+            sounds.message.play();
         });
 
         $("#input").keypress(function(e) {
@@ -24,6 +35,15 @@
 
     html {
         font-family: sans;
+    }
+
+    #chat {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        right: 15px;
+        bottom: 60px;
+        overflow: auto;
     }
 
     input {
